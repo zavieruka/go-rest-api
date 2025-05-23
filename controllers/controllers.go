@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"go-rest-api/database"
 	"go-rest-api/models"
 	"net/http"
 
@@ -14,19 +15,18 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPersonalities(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(models.Personalities)
+	var p []models.Personality
+	database.DB.Find(&p)
+
+	json.NewEncoder(w).Encode(p)
 }
 
 func GetPersonality(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	for _, personality := range models.Personalities {
-		if fmt.Sprintf("%d", personality.Id) == id {
-			json.NewEncoder(w).Encode(personality)
-			return
-		}
-	}
+	var personality models.Personality
+	database.DB.First(&personality, id)
 
-	http.Error(w, "Personality not found", http.StatusNotFound)
+	json.NewEncoder(w).Encode(personality)
 }
