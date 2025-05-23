@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"go-rest-api/database"
 	"go-rest-api/models"
 	"go-rest-api/routes"
 )
@@ -20,6 +21,8 @@ func main() {
 			History: "Marie Curie was a Polish-born physicist and chemist who conducted pioneering research on radioactivity.",
 		},
 	}
+
+	database.ConnectWithDB()
 
 	fmt.Println("Initializing the rest api server...")
 	routes.HandleRequest()
